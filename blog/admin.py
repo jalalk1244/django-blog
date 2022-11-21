@@ -19,7 +19,10 @@ class CommentAdmin(admin.ModelAdmin):
     list_display = ('name', 'post', 'body', 'created_on', 'approved')
     list_filter = ('approved', 'created_on')
     search_fields = ['name', 'email', 'body']
-    actions = ['approved_comments']
+    actions = ['approved_comments', 'delete_comments']
 
-    def approved_comments(seld, request, queryset):
+    def approved_comments(self, request, queryset):
         queryset.update(approved=True)
+
+    def delete_comments(self, request, queryset):
+        queryset.delete()
