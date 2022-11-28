@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     'crispy_forms',
     'blog',
     'allauth.socialaccount.providers.google',
+    'allauth.socialaccount.providers.facebook',
 ]
 
 
