@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Post, Comment
+from .models import Post, Comment, Dishes
 from django_summernote.admin import SummernoteModelAdmin
 
 
@@ -26,3 +26,6 @@ class CommentAdmin(admin.ModelAdmin):
 
     def delete_comments(self, request, queryset):
         queryset.delete()
+
+
+admin.site.register(Dishes)

@@ -1,7 +1,8 @@
 from django.shortcuts import render, get_object_or_404, reverse
+from django.contrib.auth.forms import UserChangeForm
 from django.views import generic, View
 from django.http import HttpResponseRedirect
-from .models import Post
+from .models import Post, Dishes
 from .forms import CommentForm
 
 
@@ -10,6 +11,16 @@ class PostList(generic.ListView):
     queryset = Post.objects.filter(status=1).order_by('-created_on')
     template_name = 'index.html'
     paginate_by = 6
+
+
+# class DishesList(generic.ListView):
+#     model = Dishes
+#     queryset = Dishes.objects.filter(available=True).order_by('name')
+#     template_name = 'dishes.html'
+
+def dishes_list(self, request):
+    dishes_list = Dishes.objects.filter(available=True).order_by('name')
+    return render(request, 'dishes.html', dishes_list)
 
 
 class PostDetail(View):
@@ -76,3 +87,20 @@ class PostLike(View):
             post.likes.add(request.user)
         
         return HttpResponseRedirect(reverse('post_detail', args=[slug]))
+
+
+
+def edit_account(request):
+    profile = request.user.profile
+    form = ProfileForm(instance=profile)
+
+    if request.method == 'POST':
+        form = ProfileForm(request.POST, request.FILES, instance=profile)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Profile Updated!')
+            return redirect('user_profile', pk=profile.id)
+    context = {
+        'form': form
+    }
+    return render(request, 'profile_form.html', context)
